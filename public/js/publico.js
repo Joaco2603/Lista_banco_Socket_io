@@ -11,6 +11,10 @@ const lblEscritorio4 = document.getElementById('lblEscritorio4');
 const socket = io();
 
 socket.on('estado-actual',(ultimo)=>{
+    
+    const audio = new Audio('./audio/new-ticket.mp3')
+    audio.play();
+
     const [ticket1,ticket2,ticket3,ticket4] = ultimo;
 
     lblTicket1.innerText = 'Ticket ' + ticket1.numero;
