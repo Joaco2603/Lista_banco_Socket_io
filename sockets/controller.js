@@ -7,7 +7,8 @@ const ticketControl = new TicketContro();
 const socketController = (socket) => {
     
 
-    socket.emit('ultimo-ticket',ticketControl.ultimo)
+    socket.emit('ultimo-ticket',ticketControl.ultimo);
+    socket.emit('estado-actual',ticketControl.ultimos4);
 
     socket.on('siguiente-ticket', ( payload, cb ) => {
         
@@ -17,7 +18,6 @@ const socketController = (socket) => {
     })
 
     socket.on('atender-ticket',({escritorio},cb)=>{
-        console.log(escritorio)
         if( !escritorio )
         {
             return cb({
@@ -27,8 +27,10 @@ const socketController = (socket) => {
         }
 
         const ticket = ticketControl.atenderTicket(escritorio);
+  
+
         if(!ticket){
-            cb({
+            return cb({
                 ok:false,
                 msg:'Ya no hay tickets pendientes'
             })
@@ -36,12 +38,12 @@ const socketController = (socket) => {
 
         if(!ticket)
         {
-            cb({
+            return cb({
                 ok:false,
                 msg: 'Ya no hay tickets pendientes'
             })
         }
-
+        socket.broadcast.emit('estado-actual',ticketControl.ultimos4)
         cb({
             ok:true,
             ticket

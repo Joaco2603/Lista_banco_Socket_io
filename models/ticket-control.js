@@ -54,7 +54,6 @@ class TicketContro {
 
   atenderTicket(escritorio) {
     // No tenemos tickets
-    console.log(this.ultimos4)
     if (this.tickets.length === 0) {
       return null;
     }
