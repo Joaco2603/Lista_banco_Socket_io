@@ -6,12 +6,14 @@ const btnAtender = document.querySelector('button');
 const lblTicket  = document.querySelector('small');
 const divAlerta  = document.querySelector('.alert');
 
+const lblPendientes = document.getElementById('lblPendientes');
+
 const searchParams = new URLSearchParams(window.location.search);
 
 if( !searchParams.has('escritorio') )
 {
     window.location =  'index.html'
-    throw new Error('El escrito es obligatorio')
+    throw new Error('El escritorio es obligatorio')
 }
 
 const escritorio = searchParams.get('escritorio');
@@ -29,13 +31,14 @@ socket.on('disconnect', () => {
     btnAtender.disabled = true;
 });
 
-// socket.on('ultimo-ticket',(payload)=>{
-//     lblNuevoTicket.innerText = 'Ticket ' + payload;
-// })
+socket.on('cola',(payload)=>{
+    lblPendientes.innerText = payload;
+})
 
-// socket.on('siguiente-ticket-server',(payload)=>{
-//     lblNuevoTicket.innerText = payload;
-// })
+socket.on('siguiente-ticket-server',(payload)=>{
+    lblTicket.innerText = `Exelente trabajo, tenemos nuevos clientes`
+    divAlerta.style.display = 'none';
+})
 
 btnAtender.addEventListener( 'click', () => {
 

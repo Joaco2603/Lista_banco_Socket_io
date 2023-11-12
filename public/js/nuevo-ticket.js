@@ -21,6 +21,7 @@ socket.on('siguiente-ticket-server',(payload)=>{
     lblNuevoTicket.innerText = payload;
 })
 
+
 btnCrear.addEventListener( 'click', () => {
     
     socket.emit( 'siguiente-ticket', null, ( ticket ) => {

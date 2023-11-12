@@ -6,14 +6,16 @@ const ticketControl = new TicketContro();
 
 const socketController = (socket) => {
     
-
     socket.emit('ultimo-ticket',ticketControl.ultimo);
     socket.emit('estado-actual',ticketControl.ultimos4);
+    socket.emit('cola',ticketControl.tickets.length)
+
 
     socket.on('siguiente-ticket', ( payload, cb ) => {
         
         const siguiente = ticketControl.siguiente();
         cb(siguiente);
+        socket.broadcast.emit('cola',ticketControl.tickets.length)
         return socket.broadcast.emit('siguiente-ticket-server',siguiente)
     })
 
@@ -44,6 +46,7 @@ const socketController = (socket) => {
             })
         }
         socket.broadcast.emit('estado-actual',ticketControl.ultimos4)
+        socket.emit('cola',ticketControl.tickets.length)
         cb({
             ok:true,
             ticket
